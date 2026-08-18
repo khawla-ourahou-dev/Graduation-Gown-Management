@@ -7,8 +7,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    libsqlite3-dev \
-    && docker-php-ext-install pdo_mysql pdo_sqlite mbstring zip xml
+    && docker-php-ext-install pdo_mysql mbstring zip xml
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
