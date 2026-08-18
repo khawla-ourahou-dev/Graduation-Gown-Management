@@ -67,7 +67,7 @@ function Orders() {
       setLoading(true)
 
       const response = await fetch(
-        'http://127.0.0.1:8000/api/orders'
+        'https://graduation-gown-management.onrender.com/api/orders'
       )
 
       if (!response.ok) {
@@ -88,9 +88,9 @@ function Orders() {
     try {
       const [clientsResponse, branchesResponse, clothingResponse] =
         await Promise.all([
-          fetch('http://127.0.0.1:8000/api/clients'),
-          fetch('http://127.0.0.1:8000/api/branches'),
-          fetch('http://127.0.0.1:8000/api/clothing'),
+          fetch('https://graduation-gown-management.onrender.com/api/clients'),
+          fetch('https://graduation-gown-management.onrender.com/api/branches'),
+          fetch('https://graduation-gown-management.onrender.com/api/clothing'),
         ])
 
       if (!clientsResponse.ok || !branchesResponse.ok || !clothingResponse.ok) {
@@ -168,7 +168,7 @@ function Orders() {
       const totalAmount = Number(form.price)
 
       const response = await fetch(
-        'http://127.0.0.1:8000/api/orders',
+        'https://graduation-gown-management.onrender.com/api/orders',
         {
           method: 'POST',
           headers: {

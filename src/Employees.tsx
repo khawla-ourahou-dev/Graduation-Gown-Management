@@ -35,8 +35,8 @@ function Employees() {
   const loadData = async () => {
     try {
       const [employeesRes, branchesRes] = await Promise.all([
-        fetch('http://127.0.0.1:8000/api/employees'),
-        fetch('http://127.0.0.1:8000/api/branches'),
+        fetch('https://graduation-gown-management.onrender.com/api/employees'),
+        fetch('https://graduation-gown-management.onrender.com/api/branches'),
       ])
 
       const employeesData = await employeesRes.json()
@@ -90,8 +90,8 @@ function Employees() {
 
     try {
       const url = editing
-        ? `http://127.0.0.1:8000/api/employees/${editing.id}`
-        : 'http://127.0.0.1:8000/api/employees'
+        ? `https://graduation-gown-management.onrender.com/api/employees/${editing.id}`
+        : 'https://graduation-gown-management.onrender.com/api/employees'
 
       const response = await fetch(url, {
         method: editing ? 'PUT' : 'POST',
@@ -134,7 +134,7 @@ function Employees() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/employees/${employee.id}`,
+        `https://graduation-gown-management.onrender.com/api/employees/${employee.id}`,
         {
           method: 'DELETE',
           headers: {

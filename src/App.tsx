@@ -22,7 +22,7 @@ function App() {
   })
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/clothing')
+    fetch('https://graduation-gown-management.onrender.com/api/clothing')
       .then((response) => response.json())
       .then((data) => {
         const clothes = Array.isArray(data) ? data : []

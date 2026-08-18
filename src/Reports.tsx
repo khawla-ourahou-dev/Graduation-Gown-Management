@@ -21,11 +21,11 @@ function Reports() {
         expensesRes,
         branchesRes
       ] = await Promise.all([
-        fetch('http://127.0.0.1:8000/api/orders'),
-        fetch('http://127.0.0.1:8000/api/clothing'),
-        fetch('http://127.0.0.1:8000/api/payments'),
-        fetch('http://127.0.0.1:8000/api/expenses'),
-        fetch('http://127.0.0.1:8000/api/branches')
+        fetch('https://graduation-gown-management.onrender.com/api/orders'),
+        fetch('https://graduation-gown-management.onrender.com/api/clothing'),
+        fetch('https://graduation-gown-management.onrender.com/api/payments'),
+        fetch('https://graduation-gown-management.onrender.com/api/expenses'),
+        fetch('https://graduation-gown-management.onrender.com/api/branches')
       ])
 
       setOrders(await ordersRes.json())

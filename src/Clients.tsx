@@ -31,7 +31,7 @@ function Clients() {
       setLoading(true)
 
       const response = await fetch(
-        'http://127.0.0.1:8000/api/clients'
+        'https://graduation-gown-management.onrender.com/api/clients'
       )
 
       if (!response.ok) {
@@ -88,8 +88,8 @@ function Clients() {
       setSaving(true)
 
       const url = editingClient
-        ? `http://127.0.0.1:8000/api/clients/${editingClient.id}`
-        : 'http://127.0.0.1:8000/api/clients'
+        ? `https://graduation-gown-management.onrender.com/api/clients/${editingClient.id}`
+        : 'https://graduation-gown-management.onrender.com/api/clients'
 
       const response = await fetch(url, {
         method: editingClient ? 'PUT' : 'POST',
@@ -135,7 +135,7 @@ function Clients() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/clients/${client.id}`,
+        `https://graduation-gown-management.onrender.com/api/clients/${client.id}`,
         {
           method: 'DELETE',
           headers: {

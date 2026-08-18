@@ -45,7 +45,7 @@ function Stock() {
   const fetchClothing = () => {
     setLoading(true)
 
-    fetch('http://127.0.0.1:8000/api/clothing')
+    fetch('https://graduation-gown-management.onrender.com/api/clothing')
       .then((response) => {
         if (!response.ok) {
           throw new Error('تعذر جلب المخزون')
@@ -101,8 +101,8 @@ function Stock() {
 
     try {
       const url = editingId
-  ? `http://127.0.0.1:8000/api/clothing/${editingId}`
-  : 'http://127.0.0.1:8000/api/clothing'
+  ? `https://graduation-gown-management.onrender.com/api/clothing/${editingId}`
+  : 'https://graduation-gown-management.onrender.com/api/clothing'
 
 const response = await fetch(url, {
   method: editingId ? 'PUT' : 'POST',
@@ -552,7 +552,7 @@ setEditingId(null)
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/clothing/${item.id}`,
+        `https://graduation-gown-management.onrender.com/api/clothing/${item.id}`,
         {
           method: 'DELETE',
           headers: {

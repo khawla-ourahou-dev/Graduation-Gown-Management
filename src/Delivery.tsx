@@ -22,7 +22,7 @@ function Delivery() {
       setMessage('جاري البحث...')
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/orders?reference=${encodeURIComponent(
+        `https://graduation-gown-management.onrender.com/api/orders?reference=${encodeURIComponent(
           ref.trim()
         )}`
       )
@@ -186,7 +186,7 @@ function Delivery() {
       setMessage('جاري حفظ العملية...')
 
       const response = await fetch(
-        `http://127.0.0.1:8000/api/orders/${order.id}`,
+        `https://graduation-gown-management.onrender.com/api/orders/${order.id}`,
         {
           method: 'PUT',
           headers: {

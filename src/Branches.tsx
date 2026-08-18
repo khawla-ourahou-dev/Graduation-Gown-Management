@@ -24,7 +24,7 @@ function Branches() {
     is_active: true,
   })
 
-  const API = 'http://127.0.0.1:8000/api/branches'
+  const API = 'https://graduation-gown-management.onrender.com/api/branches'
 
   const loadBranches = async () => {
     try {

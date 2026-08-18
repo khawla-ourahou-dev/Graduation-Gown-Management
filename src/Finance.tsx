@@ -58,10 +58,10 @@ function Finance() {
         ordersRes,
         branchesRes,
       ] = await Promise.all([
-        fetch('http://127.0.0.1:8000/api/payments'),
-        fetch('http://127.0.0.1:8000/api/expenses'),
-        fetch('http://127.0.0.1:8000/api/orders'),
-        fetch('http://127.0.0.1:8000/api/branches'),
+        fetch('https://graduation-gown-management.onrender.com/api/payments'),
+        fetch('https://graduation-gown-management.onrender.com/api/expenses'),
+        fetch('https://graduation-gown-management.onrender.com/api/orders'),
+        fetch('https://graduation-gown-management.onrender.com/api/branches'),
       ])
 
       if (
@@ -128,7 +128,7 @@ function Finance() {
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/api/payments',
+        'https://graduation-gown-management.onrender.com/api/payments',
         {
           method: 'POST',
           headers: {
@@ -185,7 +185,7 @@ function Finance() {
 
     try {
       const response = await fetch(
-        'http://127.0.0.1:8000/api/expenses',
+        'https://graduation-gown-management.onrender.com/api/expenses',
         {
           method: 'POST',
           headers: {
