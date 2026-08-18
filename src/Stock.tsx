@@ -14,6 +14,8 @@ interface Clothing {
   branch_id: number | null
 }
 
+const API = 'https://graduation-gown-management.onrender.com/api/clothing'
+
 function Stock() {
   const [clothing, setClothing] = useState<Clothing[]>([])
   const [loading, setLoading] = useState(true)
@@ -29,7 +31,7 @@ function Stock() {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
-  const [form, setForm] = useState({
+  const emptyForm = {
     name: '',
     type: '',
     size: '',
@@ -39,136 +41,263 @@ function Stock() {
     price: '',
     rental_price: '',
     branch_id: '1',
-  })
-
-  // جلب اللباس من Laravel
-  const fetchClothing = () => {
-    setLoading(true)
-
-    fetch('https://graduation-gown-management.onrender.com/api/clothing')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('تعذر جلب المخزون')
-        }
-
-        return response.json()
-      })
-      .then((data) => {
-        setClothing(data)
-        setLoading(false)
-      })
-      .catch((error) => {
-        console.error(error)
-        setError('تعذر الاتصال بالخادم')
-        setLoading(false)
-      })
   }
 
-  useEffect(() => {
-    fetchClothing()
-  }, [])
+  const [form, setForm] = useState(emptyForm)
 
-  // تغيير بيانات الفورم
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target
+  // =========================
+  // جلب المخزون
+  // =========================
 
-    setForm({
-      ...form,
-      [name]: value,
-    })
-  }
-
-  // حفظ لباس جديد
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    setError('')
-
-    if (
-      !form.name ||
-      !form.type ||
-      !form.size ||
-      !form.color ||
-      !form.unique_number
-    ) {
-      setError('المرجو ملء جميع المعلومات الأساسية')
-      return
-    }
-
-    setSaving(true)
-
+  const fetchClothing = async () => {
     try {
-      const url = editingId
-  ? `https://graduation-gown-management.onrender.com/api/clothing/${editingId}`
-  : 'https://graduation-gown-management.onrender.com/api/clothing'
+      setLoading(true)
+      setError('')
 
-const response = await fetch(url, {
-  method: editingId ? 'PUT' : 'POST',
+      const response = await fetch(API, {
+        headers: {
+          Accept: 'application/json',
+        },
+      })
 
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-
-  body: JSON.stringify({
-    name: form.name,
-    type: form.type,
-    size: form.size,
-    color: form.color,
-    unique_number: form.unique_number,
-    status: form.status,
-    price: form.price ? Number(form.price) : null,
-    rental_price: form.rental_price
-      ? Number(form.rental_price)
-      : null,
-    branch_id: Number(form.branch_id),
-  }),
-})
-setShowForm(false)
-setEditingId(null)
       const data = await response.json()
 
       if (!response.ok) {
-        console.error(data)
-        throw new Error(
-          data.message || 'حدث خطأ أثناء إضافة اللباس'
-        )
+        throw new Error(data.message || 'تعذر جلب المخزون')
       }
 
-      // إضافة اللباس الجديد مباشرة للجدول
-      setClothing((previous) => [...previous, data])
-
-      // إغلاق الفورم
-      setShowForm(false)
-
-      // تفريغ الفورم
-      setForm({
-        name: '',
-        type: '',
-        size: '',
-        color: '',
-        unique_number: '',
-        status: 'available',
-        price: '',
-        rental_price: '',
-        branch_id: '1',
-      })
+      setClothing(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error(error)
 
       if (error instanceof Error) {
         setError(error.message)
       } else {
-        setError('حدث خطأ أثناء إضافة اللباس')
+        setError('تعذر الاتصال بالخادم')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchClothing()
+  }, [])
+
+  // =========================
+  // تغيير الفورم
+  // =========================
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target
+
+    setForm((previous) => ({
+      ...previous,
+      [name]: value,
+    }))
+  }
+
+  // =========================
+  // إضافة / تعديل لباس
+  // =========================
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    setError('')
+
+    if (
+      !form.name.trim() ||
+      !form.type.trim() ||
+      !form.size.trim() ||
+      !form.color.trim() ||
+      !form.unique_number.trim()
+    ) {
+      setError('المرجو ملء جميع المعلومات الأساسية')
+      return
+    }
+
+    try {
+      setSaving(true)
+
+      const url = editingId
+        ? `${API}/${editingId}`
+        : API
+
+      const method = editingId ? 'PUT' : 'POST'
+
+      const body = {
+        name: form.name.trim(),
+        type: form.type.trim(),
+        size: form.size.trim(),
+        color: form.color.trim(),
+        unique_number: form.unique_number.trim(),
+        status: form.status,
+        price: form.price
+          ? Number(form.price)
+          : null,
+        rental_price: form.rental_price
+          ? Number(form.rental_price)
+          : null,
+        branch_id: form.branch_id
+          ? Number(form.branch_id)
+          : null,
+      }
+
+      console.log('Sending:', body)
+
+      const response = await fetch(url, {
+        method,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+
+      const data = await response.json()
+
+      console.log('Laravel response:', data)
+
+      if (!response.ok) {
+        const validationErrors = data.errors
+          ? Object.values(data.errors)
+              .flat()
+              .join('\n')
+          : ''
+
+        throw new Error(
+          validationErrors ||
+          data.message ||
+          'حدث خطأ أثناء حفظ اللباس'
+        )
+      }
+
+      // =========================
+      // إذا كان تعديل
+      // =========================
+
+      if (editingId) {
+        setClothing((previous) =>
+          previous.map((item) =>
+            item.id === editingId
+              ? data
+              : item
+          )
+        )
+
+        alert('تم تعديل اللباس بنجاح ✅')
+      }
+
+      // =========================
+      // إذا كان إضافة
+      // =========================
+
+      else {
+        setClothing((previous) => [
+          ...previous,
+          data,
+        ])
+
+        alert('تمت إضافة اللباس بنجاح ✅')
+      }
+
+      // إعادة الفورم للوضع العادي
+      setForm(emptyForm)
+      setEditingId(null)
+      setShowForm(false)
+
+    } catch (error) {
+      console.error('Save error:', error)
+
+      if (error instanceof Error) {
+        setError(error.message)
+      } else {
+        setError('حدث خطأ أثناء حفظ اللباس')
       }
     } finally {
       setSaving(false)
     }
   }
 
+  // =========================
+  // تعديل لباس
+  // =========================
+
+  const handleEdit = (item: Clothing) => {
+    setEditingId(item.id)
+
+    setForm({
+      name: item.name || '',
+      type: item.type || '',
+      size: item.size || '',
+      color: item.color || '',
+      unique_number: item.unique_number || '',
+      status: item.status || 'available',
+      price: item.price ?? '',
+      rental_price: item.rental_price ?? '',
+      branch_id: String(item.branch_id ?? 1),
+    })
+
+    setError('')
+    setShowForm(true)
+  }
+
+  // =========================
+  // حذف لباس
+  // =========================
+
+  const handleDelete = async (id: number, name: string) => {
+    const confirmed = window.confirm(
+      `واش متأكدة بغيتي تحيدي ${name} ؟`
+    )
+
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(
+        `${API}/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+          },
+        }
+      )
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || 'فشل حذف اللباس'
+        )
+      }
+
+      setClothing((previous) =>
+        previous.filter(
+          (item) => item.id !== id
+        )
+      )
+
+      alert('تم حذف اللباس بنجاح ✅')
+
+    } catch (error) {
+      console.error(error)
+
+      if (error instanceof Error) {
+        alert(error.message)
+      } else {
+        alert('وقع خطأ أثناء حذف اللباس ❌')
+      }
+    }
+  }
+
+  // =========================
   // البحث والفلاتر
+  // =========================
+
   const filteredClothing = clothing.filter((item) => {
     const searchValue = search.toLowerCase()
 
@@ -179,16 +308,20 @@ setEditingId(null)
       item.color.toLowerCase().includes(searchValue)
 
     const matchesType =
-      !typeFilter || item.type === typeFilter
+      !typeFilter ||
+      item.type === typeFilter
 
     const matchesSize =
-      !sizeFilter || item.size === sizeFilter
+      !sizeFilter ||
+      item.size === sizeFilter
 
     const matchesColor =
-      !colorFilter || item.color === colorFilter
+      !colorFilter ||
+      item.color === colorFilter
 
     const matchesStatus =
-      !statusFilter || item.status === statusFilter
+      !statusFilter ||
+      item.status === statusFilter
 
     return (
       matchesSearch &&
@@ -199,7 +332,10 @@ setEditingId(null)
     )
   })
 
+  // =========================
   // الإحصائيات
+  // =========================
+
   const available = clothing.filter(
     (item) => item.status === 'available'
   ).length
@@ -216,10 +352,33 @@ setEditingId(null)
     (item) => item.status === 'cleaning'
   ).length
 
+  // =========================
+  // فتح فورم الإضافة
+  // =========================
+
+  const openAddForm = () => {
+    setEditingId(null)
+    setForm(emptyForm)
+    setError('')
+    setShowForm(true)
+  }
+
+  // =========================
+  // إغلاق الفورم
+  // =========================
+
+  const closeForm = () => {
+    setShowForm(false)
+    setEditingId(null)
+    setForm(emptyForm)
+    setError('')
+  }
+
   return (
     <div className="stock-page">
 
       {/* العنوان */}
+
       <div className="stock-header">
         <div>
           <h1>المخزون 👗</h1>
@@ -229,20 +388,19 @@ setEditingId(null)
         <button
           className="add-stock-btn"
           type="button"
-          onClick={() => {
-            setError('')
-            setShowForm(true)
-          }}
+          onClick={openAddForm}
         >
           + إضافة لباس جديد
         </button>
       </div>
 
       {/* الإحصائيات */}
+
       <div className="stock-stats">
 
         <div className="stock-card">
           <span className="stock-icon">👗</span>
+
           <div>
             <p>اللباس المتوفر</p>
             <h2>{available}</h2>
@@ -251,6 +409,7 @@ setEditingId(null)
 
         <div className="stock-card">
           <span className="stock-icon">📅</span>
+
           <div>
             <p>اللباس المحجوز</p>
             <h2>{reserved}</h2>
@@ -259,6 +418,7 @@ setEditingId(null)
 
         <div className="stock-card">
           <span className="stock-icon">🧥</span>
+
           <div>
             <p>اللباس المكتري</p>
             <h2>{rented}</h2>
@@ -267,6 +427,7 @@ setEditingId(null)
 
         <div className="stock-card">
           <span className="stock-icon">🧺</span>
+
           <div>
             <p>في التصبين</p>
             <h2>{cleaning}</h2>
@@ -276,6 +437,7 @@ setEditingId(null)
       </div>
 
       {/* البحث والفلاتر */}
+
       <div className="stock-filters">
 
         <div className="search-box">
@@ -285,13 +447,17 @@ setEditingId(null)
             type="text"
             placeholder="البحث عن لباس..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
           />
         </div>
 
         <select
           value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
+          onChange={(e) =>
+            setTypeFilter(e.target.value)
+          }
         >
           <option value="">كل الأنواع</option>
           <option value="روب تخرج">روب تخرج</option>
@@ -301,7 +467,9 @@ setEditingId(null)
 
         <select
           value={sizeFilter}
-          onChange={(e) => setSizeFilter(e.target.value)}
+          onChange={(e) =>
+            setSizeFilter(e.target.value)
+          }
         >
           <option value="">كل المقاسات</option>
           <option value="S">S</option>
@@ -312,7 +480,9 @@ setEditingId(null)
 
         <select
           value={colorFilter}
-          onChange={(e) => setColorFilter(e.target.value)}
+          onChange={(e) =>
+            setColorFilter(e.target.value)
+          }
         >
           <option value="">كل الألوان</option>
           <option value="أسود">أسود</option>
@@ -323,7 +493,9 @@ setEditingId(null)
 
         <select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) =>
+            setStatusFilter(e.target.value)
+          }
         >
           <option value="">كل الحالات</option>
           <option value="available">متوفر</option>
@@ -334,18 +506,33 @@ setEditingId(null)
 
       </div>
 
-      {/* فورم إضافة لباس */}
+      {/* رسالة الخطأ */}
+
+      {error && (
+        <div
+          style={{
+            color: 'red',
+            background: '#ffeaea',
+            padding: '12px',
+            margin: '15px 0',
+            borderRadius: '8px',
+            whiteSpace: 'pre-line',
+          }}
+        >
+          {error}
+        </div>
+      )}
+
+      {/* فورم إضافة / تعديل */}
+
       {showForm && (
         <div className="stock-form">
 
-<h2>
-  {editingId ? 'تعديل اللباس 👗' : 'إضافة لباس جديد 👗'}
-</h2>
-          {error && (
-            <p style={{ color: 'red' }}>
-              {error}
-            </p>
-          )}
+          <h2>
+            {editingId
+              ? 'تعديل اللباس 👗'
+              : 'إضافة لباس جديد 👗'}
+          </h2>
 
           <form onSubmit={handleSubmit}>
 
@@ -370,7 +557,10 @@ setEditingId(null)
               value={form.size}
               onChange={handleChange}
             >
-              <option value="">اختر المقاس</option>
+              <option value="">
+                اختر المقاس
+              </option>
+
               <option value="S">S</option>
               <option value="M">M</option>
               <option value="L">L</option>
@@ -398,15 +588,27 @@ setEditingId(null)
               value={form.status}
               onChange={handleChange}
             >
-              <option value="available">متوفر</option>
-              <option value="reserved">محجوز</option>
-              <option value="rented">مكتري</option>
-              <option value="cleaning">في التصبين</option>
+              <option value="available">
+                متوفر
+              </option>
+
+              <option value="reserved">
+                محجوز
+              </option>
+
+              <option value="rented">
+                مكتري
+              </option>
+
+              <option value="cleaning">
+                في التصبين
+              </option>
             </select>
 
             <input
               name="price"
               type="number"
+              min="0"
               placeholder="ثمن البيع"
               value={form.price}
               onChange={handleChange}
@@ -415,6 +617,7 @@ setEditingId(null)
             <input
               name="rental_price"
               type="number"
+              min="0"
               placeholder="ثمن الكراء"
               value={form.rental_price}
               onChange={handleChange}
@@ -424,10 +627,8 @@ setEditingId(null)
 
               <button
                 type="button"
-                onClick={() => {
-                  setShowForm(false)
-                  setError('')
-                }}
+                onClick={closeForm}
+                disabled={saving}
               >
                 إلغاء
               </button>
@@ -436,11 +637,12 @@ setEditingId(null)
                 type="submit"
                 disabled={saving}
               >
-{saving
-  ? 'جاري الحفظ...'
-  : editingId
-    ? 'حفظ التعديل'
-    : 'حفظ'}              </button>
+                {saving
+                  ? 'جاري الحفظ...'
+                  : editingId
+                    ? 'حفظ التعديل'
+                    : 'حفظ'}
+              </button>
 
             </div>
 
@@ -450,6 +652,7 @@ setEditingId(null)
       )}
 
       {/* جدول المخزون */}
+
       <div className="stock-table-container">
 
         <table className="stock-table">
@@ -469,19 +672,25 @@ setEditingId(null)
           <tbody>
 
             {loading ? (
+
               <tr>
                 <td colSpan={7}>
                   جاري تحميل المخزون...
                 </td>
               </tr>
+
             ) : filteredClothing.length === 0 ? (
+
               <tr>
                 <td colSpan={7}>
                   لا توجد ألبسة مطابقة للبحث
                 </td>
               </tr>
+
             ) : (
+
               filteredClothing.map((item) => (
+
                 <tr key={item.id}>
 
                   <td>
@@ -501,12 +710,23 @@ setEditingId(null)
                   </td>
 
                   <td>
-                    <span className={`status ${item.status}`}>
-                      {item.status === 'available' && 'متوفر'}
-                      {item.status === 'reserved' && 'محجوز'}
-                      {item.status === 'rented' && 'مكتري'}
-                      {item.status === 'cleaning' && 'في التصبين'}
+
+                    <span
+                      className={`status ${item.status}`}
+                    >
+                      {item.status === 'available' &&
+                        'متوفر'}
+
+                      {item.status === 'reserved' &&
+                        'محجوز'}
+
+                      {item.status === 'rented' &&
+                        'مكتري'}
+
+                      {item.status === 'cleaning' &&
+                        'في التصبين'}
                     </span>
+
                   </td>
 
                   <td>
@@ -516,73 +736,36 @@ setEditingId(null)
                   </td>
 
                   <td>
-                  <button
-  className="action-btn"
-  type="button"
-  onClick={() => {
-    setEditingId(item.id)
 
-    setForm({
-      name: item.name,
-      type: item.type,
-      size: item.size,
-      color: item.color,
-      unique_number: item.unique_number,
-      status: item.status,
-      price: item.price ?? '',
-      rental_price: item.rental_price ?? '',
-      branch_id: String(item.branch_id ?? 1),
-    })
+                    <button
+                      className="action-btn"
+                      type="button"
+                      onClick={() =>
+                        handleEdit(item)
+                      }
+                    >
+                      تعديل
+                    </button>
 
-    setError('')
-    setShowForm(true)
-  }}
->
-  تعديل
-</button>
-                  <button
-  className="delete-btn"
-  type="button"
-  onClick={async () => {
-    const confirmed = window.confirm(
-      `واش متأكدة بغيتي تحيدي ${item.name} ؟`
-    )
+                    <button
+                      className="delete-btn"
+                      type="button"
+                      onClick={() =>
+                        handleDelete(
+                          item.id,
+                          item.name
+                        )
+                      }
+                    >
+                      حذف
+                    </button>
 
-    if (!confirmed) return
-
-    try {
-      const response = await fetch(
-        `https://graduation-gown-management.onrender.com/api/clothing/${item.id}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Accept: 'application/json',
-          },
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('فشل حذف اللباس')
-      }
-
-      // نحيدوه مباشرة من الجدول
-      setClothing((previous) =>
-        previous.filter((clothing) => clothing.id !== item.id)
-      )
-
-      alert('تم حذف اللباس بنجاح ✅')
-    } catch (error) {
-      console.error(error)
-      alert('وقع خطأ أثناء حذف اللباس ❌')
-    }
-  }}
->
-  حذف
-</button>
                   </td>
 
                 </tr>
+
               ))
+
             )}
 
           </tbody>
