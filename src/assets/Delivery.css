@@ -1,0 +1,301 @@
+.delivery-page {
+  width: 100%;
+}
+
+.delivery-header {
+  margin-bottom: 25px;
+}
+
+.delivery-header h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #333;
+}
+
+.delivery-header p {
+  margin: 0;
+  color: #888;
+  font-size: 16px;
+}
+
+/* =========================
+   TABS
+========================= */
+
+.delivery-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.delivery-tab {
+  border: 1px solid #ddd;
+  background: white;
+  padding: 13px 25px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.delivery-tab.active {
+  background: #e9a6b0;
+  color: white;
+  border-color: #e9a6b0;
+}
+
+/* =========================
+   QR SECTION
+========================= */
+
+.qr-section {
+  background: white;
+  border-radius: 15px;
+  padding: 35px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.qr-content {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+}
+
+.qr-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 15px;
+  border: 3px solid #444;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 55px;
+}
+
+.qr-content h2 {
+  margin: 10px 0;
+  color: #333;
+}
+
+.qr-content p {
+  color: #888;
+  line-height: 1.7;
+}
+
+.scan-qr {
+  border: none;
+  background: #e9a6b0;
+  color: white;
+  padding: 14px 30px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.scan-qr:hover {
+  background: #dc8f9b;
+}
+
+.or-line {
+  margin: 22px 0;
+  border-top: 1px solid #eee;
+  position: relative;
+}
+
+.or-line span {
+  position: relative;
+  top: -12px;
+  background: white;
+  padding: 0 12px;
+  color: #999;
+}
+
+.order-search {
+  width: 100%;
+  height: 48px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.search-order {
+  width: 100%;
+  height: 45px;
+  border: none;
+  background: #555;
+  color: white;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+/* =========================
+   ORDER INFO
+========================= */
+
+.delivery-order {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.delivery-order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.delivery-order-header h2 {
+  margin: 0 0 7px;
+  color: #333;
+}
+
+.delivery-order-header p {
+  margin: 0;
+  color: #999;
+}
+
+.delivery-status {
+  background: #f8dfe3;
+  color: #a95362;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/* =========================
+   CUSTOMER
+========================= */
+
+.customer-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.customer-info div {
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 17px;
+}
+
+.customer-info span {
+  display: block;
+  color: #999;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.customer-info strong {
+  color: #444;
+}
+
+/* =========================
+   CLOTHES
+========================= */
+
+.clothes-title {
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.clothes-table {
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.clothes-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  text-align: center;
+}
+
+.clothes-row:last-child {
+  border-bottom: none;
+}
+
+.clothes-head {
+  background: #f8dfe3;
+  font-weight: bold;
+  color: #555;
+}
+
+.clothes-row span {
+  color: #555;
+}
+
+.good {
+  color: #6b6b6b !important;
+  font-weight: bold;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.delivery-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 25px;
+}
+
+.confirm-delivery {
+  border: none;
+  background: #e9a6b0;
+  color: white;
+  padding: 13px 25px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.cancel-delivery {
+  border: 1px solid #ddd;
+  background: white;
+  color: #555;
+  padding: 13px 25px;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .customer-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .customer-info {
+    grid-template-columns: 1fr;
+  }
+
+  .clothes-row {
+    min-width: 650px;
+  }
+
+  .clothes-table {
+    overflow-x: auto;
+  }
+
+  .delivery-order-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+}

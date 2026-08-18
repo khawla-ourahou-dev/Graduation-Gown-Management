@@ -1,0 +1,289 @@
+/* =========================
+   EMPLOYEES PAGE
+========================= */
+
+.employees-page {
+  width: 100%;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.employees-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.employees-header h1 {
+  margin: 0 0 8px;
+  font-size: 34px;
+  color: #333;
+}
+
+.employees-header p {
+  margin: 0;
+  color: #888;
+  font-size: 16px;
+}
+
+.add-employee {
+  border: none;
+  background: #e9a6b0;
+  color: white;
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-employee:hover {
+  background: #dc8f9b;
+}
+
+/* =========================
+   STATISTICS
+========================= */
+
+.employee-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+.employee-stat {
+  background: white;
+  border: 1px solid #eeeeee;
+  border-radius: 15px;
+  padding: 25px 20px;
+  min-height: 125px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.employee-stat span {
+  color: #777;
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.employee-stat strong {
+  font-size: 32px;
+  color: #333;
+}
+
+/* =========================
+   SEARCH & FILTERS
+========================= */
+
+.employees-tools {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.employees-tools input,
+.employees-tools select {
+  height: 48px;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+  background: white;
+  padding: 0 15px;
+  font-size: 15px;
+  color: #555;
+}
+
+.employees-tools input {
+  flex: 1;
+}
+
+.employees-tools select {
+  min-width: 170px;
+}
+
+.employees-tools input:focus,
+.employees-tools select:focus {
+  outline: none;
+  border-color: #e9a6b0;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.employees-table-container {
+  background: white;
+  border-radius: 15px;
+  overflow-x: auto;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.employees-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.employees-table th {
+  background: #f8dfe3;
+  color: #555;
+  padding: 17px 12px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.employees-table td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #eeeeee;
+  text-align: center;
+  white-space: nowrap;
+  color: #555;
+}
+
+.employees-table tbody tr:hover {
+  background: #fff8f9;
+}
+
+/* =========================
+   EMPLOYEE NAME
+========================= */
+
+.employee-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: right;
+}
+
+.employee-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #f8dfe3;
+  color: #a95362;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.employee-name strong {
+  display: block;
+  color: #444;
+  margin-bottom: 4px;
+}
+
+.employee-name small {
+  display: block;
+  color: #999;
+  font-size: 12px;
+}
+
+/* =========================
+   ROLES
+========================= */
+
+.role {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.role.admin {
+  background: #f8dfe3;
+  color: #a95362;
+}
+
+.role.whatsapp {
+  background: #fff0f3;
+  color: #c56d7b;
+}
+
+.role.branch {
+  background: #eeeeee;
+  color: #555;
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.employee-status {
+  display: inline-block;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.employee-status.active {
+  background: #eeeeee;
+  color: #555;
+}
+
+.employee-status.inactive {
+  background: #f2f2f2;
+  color: #999;
+}
+
+/* =========================
+   ACTION
+========================= */
+
+.employee-action {
+  border: none;
+  background: #e9a6b0;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.employee-action:hover {
+  background: #dc8f9b;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+  .employee-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .employees-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .employees-tools {
+    flex-direction: column;
+  }
+
+  .employees-tools select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .employee-stats {
+    grid-template-columns: 1fr;
+  }
+}

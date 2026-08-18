@@ -1,0 +1,60 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# Laravel
+graduation-backend/.env
+graduation-backend/.env.*
+!graduation-backend/.env.example
+
+graduation-backend/vendor/
+graduation-backend/node_modules/
+graduation-backend/storage/*.key
+graduation-backend/storage/framework/cache/*
+graduation-backend/storage/framework/sessions/*
+graduation-backend/storage/framework/views/*
+graduation-backend/bootstrap/cache/*
+
+# SQLite database
+graduation-backend/database/*.sqlite
+graduation-backend/database/*.sqlite-journal
+
+# Environment files
+.env
+.env.*
+!.env.example
+# Main Laravel backend
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+backend/vendor/
+backend/node_modules/
+
+backend/storage/framework/cache/*
+backend/storage/framework/sessions/*
+backend/storage/framework/views/*
+backend/bootstrap/cache/*
+
+backend/database/*.sqlite
+backend/database/*.sqlite-journal
